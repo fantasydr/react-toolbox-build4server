@@ -175,8 +175,9 @@ module.exports = function (gulp, src, dest, scssPrepend) {
 
         // Read a class-name to unique class-name mappings for each .scss file and fix remaining class-name replacements
         gulp.task('react-toolbox-build4server.scss.process.finish', function () {
-            return gulp.src(
-                path.join(dest, 'jsx/**/style*.scss')
+            return gulp.src([
+                path.join(dest, 'jsx/**/theme*.scss'),
+                path.join(dest, 'jsx/**/style*.scss')]
             )
                 .pipe(through.obj(function (file, enc, cb) {
                     // Get JS mappings
@@ -242,8 +243,9 @@ module.exports = function (gulp, src, dest, scssPrepend) {
 
         // Concatenate all style .scss files
         gulp.task('react-toolbox-build4server.concat.style.scss', function () {
-            return gulp.src(
-                path.join(dest, 'jsx/**/style*.scss')
+            return gulp.src([
+                path.join(dest, 'jsx/**/theme*.scss'),
+                path.join(dest, 'jsx/**/style*.scss')]
             )
                 .pipe(gulpConcat('style.scss'))
                 .pipe(through.obj(function (file, enc, cb) {
@@ -295,8 +297,10 @@ module.exports = function (gulp, src, dest, scssPrepend) {
         gulp.task('react-toolbox-build4server.transpile.react-toolbox.jsx', function () {
             return gulp.src([
                 path.join(dest, 'jsx/**/*.js'),
+                '!' + path.join(dest, 'jsx/**/theme*.js'),
                 '!' + path.join(dest, 'jsx/**/style*.js'),
                 path.join(dest, 'jsx/**/*.jsx'),
+                '!' + path.join(dest, 'jsx/**/theme*.jsx'),
                 '!' + path.join(dest, 'jsx/**/style*.jsx')
             ])
                 .pipe(gulpSrcmaps.init())
