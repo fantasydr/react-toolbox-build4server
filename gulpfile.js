@@ -330,6 +330,23 @@ module.exports = function (gulp, src, dest, scssPrepend) {
                 .pipe(gulp.dest(dest));
         });
 
+        // Expose Broserified react-toolbox's main entry point
+        gulp.task('react-toolbox-build4server.replace.scss', function () {
+            return gulp.src(
+                path.join(dest, 'js/**/index.js')
+            )
+                .pipe(through.obj(function (file, enc, cb) {
+                    // replace the scss extension in require
+                    var contents = file.contents.toString();
+                    contents = contents.replace(/\.scss/g, '');
+                    file.contents = new Buffer(contents);
+                    cb(null, file);
+                }))
+                .pipe(gulp.dest(
+                    path.join(dest, 'js')
+                ));
+        });
+
     }
 
     // Define main task
@@ -354,7 +371,8 @@ module.exports = function (gulp, src, dest, scssPrepend) {
         'react-toolbox-build4server.copy.react-toolbox.style',
         'react-toolbox-build4server.transpile.react-toolbox.jsx',
 
-        'react-toolbox-build4server.transpile.react-toolbox.index'
+        'react-toolbox-build4server.transpile.react-toolbox.index',
+        'react-toolbox-build4server.replace.scss',
 
     ]));
 
